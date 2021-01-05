@@ -65,6 +65,20 @@ public class Log4j2Configuration {
         return fileAppender;
     }
 
+    public AppenderComponentBuilder getSmtpAppender() {
+
+        AppenderComponentBuilder smtpAppender = builder.newAppender("Mail", "SMTP");
+        smtpAppender.addAttribute("subject", AppConstants.APPLICATION_NAME + " Exception");
+        smtpAppender.addAttribute("to", "devs@noloot.rip");
+        smtpAppender.addAttribute("from", "exceptions@noloot.rip");
+        smtpAppender.addAttribute("smtpHost", "localhost");
+        smtpAppender.addAttribute("smtpPort", "25");
+
+        smtpAppender.add(standard);
+
+        return smtpAppender;
+    }
+
     @PostConstruct
     public void initializeLog4J2() throws IOException {
 
@@ -76,24 +90,18 @@ public class Log4j2Configuration {
         RootLoggerComponentBuilder rootLogger = builder.newRootLogger(loggingLevel);
         rootLogger.addAttribute("additivity", true);
 
+        AppenderComponentBuilder fileAppender = this.getFileAppender();
+        builder.add(fileAppender);
+        rootLogger.add(builder.newAppenderRef(fileAppender.getName()));
+
         if (isDevelopment) {
-
             AppenderComponentBuilder consoleAppender = this.getConsoleAppender();
-            AppenderComponentBuilder fileAppender = this.getFileAppender();
-
             builder.add(consoleAppender);
-            builder.add(fileAppender);
-
             rootLogger.add(builder.newAppenderRef(consoleAppender.getName()));
-            rootLogger.add(builder.newAppenderRef(fileAppender.getName()));
-
         } else {
-
-            AppenderComponentBuilder fileAppender = this.getFileAppender();
-
-            builder.add(this.getFileAppender());
-            rootLogger.add(builder.newAppenderRef(fileAppender.getName()));
-
+            AppenderComponentBuilder smtpAppender = this.getSmtpAppender();
+            builder.add(smtpAppender);
+            rootLogger.add(builder.newAppenderRef(smtpAppender.getName()));
         }
 
         builder.setStatusLevel(loggingLevel);
