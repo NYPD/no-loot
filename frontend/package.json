@@ -1,12 +1,24 @@
 {
   "name": "frontend",
   "version": "0.1.0",
+  "description": "No Loot Vue App",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NYPD/no-loot"
+  },
+  "bugs": {
+    "url": "https://github.com/NYPD/no-loot/issues"
+  },
+  "author": {
+    "name": "NYPD"
+  },
+  "license": "GNU General Public License v3.0"
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
