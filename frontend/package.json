@@ -18,7 +18,7 @@
   "author": {
     "name": "NYPD"
   },
-  "license": "GNU General Public License v3.0"
+  "license": "GNU General Public License v3.0",
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
