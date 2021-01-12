@@ -1,5 +1,8 @@
 const path = require("path");
 
 module.exports = {
-  outputDir: "../backend/src/main/webapp"
+  outputDir: "../backend/src/main/webapp",
+  css: {
+    sourceMap: true
+  }
 }
