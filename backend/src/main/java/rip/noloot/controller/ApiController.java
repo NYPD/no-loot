@@ -10,19 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api")
 public class ApiController {
 
-    private static final Logger LOGGER = LogManager.getLogger(MainController.class);
+    private static final Logger LOGGER = LogManager.getLogger(ApiController.class);
 
     @GetMapping(value = "/test")
     public int test() {
         LOGGER.info("This is an info message");
         return 69;
     }
-
-    //    // Forwards all routes to FrontEnd except: '/', '/index.html', '/api', '/api/**'
-    //    // Required because of 'mode: history' usage in frontend routing, see README for further details
-    //    @RequestMapping(value = "{_:^(?!index\\.html|api).*$}")
-    //    public String redirectApi() {
-    //        return "forward:/";
-    //    }
 
 }
