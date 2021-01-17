@@ -3,7 +3,7 @@
     <div class="col d-flex justify-content-center">
       <div class="login-container">
         <h2 class="login-header">Log in With:</h2>
-        <div class="row g-0">
+        <div class="row g-0 d-flex justify-content-center align-items-center">
           <div class="col-sm-auto d-flex justify-content-center align-items-center">
 
             <div class="form-check">
@@ -19,14 +19,9 @@
 
             <div class="login-service">
               <img alt="Battle.net logo" src="../assets/battlenet-logo.png">
-              <p>Login with Battle.net</p>
+              <p class="flex-grow-1 align-self-center">Login with Battle.net</p>
             </div>
 
-            <div class="login-service">
-              <img alt="Battle.net logo" src="../assets/battlenet-logo.png">
-              <p>Login with Google</p>
-            </div>
-            
           </div>
 
         </div>
@@ -38,19 +33,34 @@
 
 <style>
   .login-container {
+    /* Positioning */
+    /* Box-model */
     margin-top: 60px;
     margin-bottom: 60px;
     padding: 15px;
     min-width: 420px;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    /* Typography */
+    /* Visual */
     border-radius: 3px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    /* Misc */
   }
 
   .login-container .login-header {
+    /* Positioning */
+    /* Box-model */
     margin-bottom: 2.5rem;
+    /* Typography */
+    /* Visual */
+    /* Misc */
   }
 
   .login-container .vertical-rule {
+    /* Positioning */
+    /* Box-model */
+    /* Typography */
+    /* Visual */
+    /* Misc */
     margin-left: 10px;
     margin-right: 10px;
     border-left: 1px solid rgba(0, 0, 0, 0.1);
@@ -58,30 +68,52 @@
     height: 100px;
   }
   .login-container .login-service {
+    /* Positioning */
+    /* Box-model */
+    /* Typography */
+    /* Visual */
+    border-radius: 20px;
     background-color: #4285f4;
+    /* Misc */
     cursor: pointer;
   }
   .login-container .login-service:not(:first-child) {
-     margin-top: 10px;
+    /* Positioning */
+    /* Box-model */
+    margin-top: 10px;
+    /* Typography */
+    /* Visual */
+    /* Misc */
+     
   }
   .login-container .login-service img {
 
-    vertical-align: middle;
+    /* Positioning */
+    /* Box-model */
     width: 46px;
-
+    /* Typography */
+    /* Visual */
     background-color: white;
-
+    background-color: white;
     border-style: solid;
     border-width: 1px;
     border-color: #4285f4;
-    
+    border-radius: 20px;
+    /* Misc */
+    vertical-align: middle;
   }
   .login-container .login-service p {
+
+    /* Positioning */
+    /* Box-model */
     display: inline-block;
-    vertical-align: middle;
-    margin: 0;
     padding-left: 10px;
+    margin: 0;
+    /* Typography */
     color: #ffffff;
     font-weight: bold;
+    /* Visual */
+    /* Misc */
+    vertical-align: middle;
   }
 </style>

@@ -20,4 +20,5 @@ public class AppConstants {
 
     public static final String DEV_URL = "http://localhost:8080";
     public static final String PROD_URL = "https://noloot.rip";
+
 }
