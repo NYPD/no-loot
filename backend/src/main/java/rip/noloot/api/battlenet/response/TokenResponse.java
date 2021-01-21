@@ -1,4 +1,4 @@
-package rip.noloot.api.battlenet;
+package rip.noloot.api.battlenet.response;
 
 /**
  * POJO for reading in the oAuth2 access token response from https://_region_.battle.net/oauth/token .

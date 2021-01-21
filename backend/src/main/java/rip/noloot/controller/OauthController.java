@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +25,9 @@ public class OauthController {
     @Autowired
     private BattlenetLoginService battlenetLoginService;
 
-    /* Battle.net OAuth ****************************************************************************************************/
+    /*
+     * Battle.net OAuth ---------------------------------------------------------------------------------------------------
+     */
     @RequestMapping(value = "battlenet-oauth-login")
     public void battlenetOAuthLogin(HttpServletResponse response,
                                     @RequestParam(value = "rememberMe", required = false) boolean rememberMe,
@@ -42,9 +43,9 @@ public class OauthController {
     }
 
     @RequestMapping(value = "battlenet-oauth-verify")
-    public ModelAndView battlenetOAuthVerify(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public ModelAndView battlenetOAuthVerify(HttpServletRequest request, HttpServletResponse response) {
 
-        battlenetLoginService.verifyAuthenticationResponse(request);
+        battlenetLoginService.verifyAuthenticationResponseAndRetrieveToken(request);
 
         User noLootUser = battlenetLoginService.getNoLootUser();
 
@@ -67,4 +68,6 @@ public class OauthController {
         }
 
     }
+    /* ------------------------------------------------------------------------------------------------------------------- */
+
 }

@@ -20,6 +20,7 @@
             <div class="login-service">
               <img alt="Battle.net logo" src="../assets/battlenet-logo.png">
               <p class="flex-grow-1 align-self-center">Login with Battle.net</p>
+              <a href="/api/battlenet-oauth-login">Bruh</a>
             </div>
 
           </div>

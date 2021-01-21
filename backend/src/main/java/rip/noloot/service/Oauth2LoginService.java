@@ -1,8 +1,12 @@
 package rip.noloot.service;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import rip.noloot.exception.InvalidStateTokenException;
 import rip.noloot.model.User;
 
 public interface Oauth2LoginService {
@@ -15,13 +19,16 @@ public interface Oauth2LoginService {
     public String getAuthenticationRequestUrl();
 
     /**
-     * Verifies the response from the API server and retrieves the token needed to make API calls.
      * 
-     * After retrieving the token it stores any necessary information needed to make future API calls
+     * Verifies the response from the API server and if valid, retrieves the token needed to make API calls. If the response
+     * is invalid due a miss matching state token a {@link InvalidStateTokenException} is thrown.
+     * 
+     * The token is stored in session to be used to make any future API calls
      * 
      * @param request - The HttpServletRequest from the API server
+     * @throws InvalidStateTokenException
      */
-    public void verifyAuthenticationResponse(HttpServletRequest request);
+    public void verifyAuthenticationResponseAndRetrieveToken(HttpServletRequest request) throws InvalidStateTokenException;
 
     /**
      * Return the corresponding app user using the unique API's user id. If no user is found null is returned.
@@ -47,5 +54,14 @@ public interface Oauth2LoginService {
      * @param response
      */
     public void reAuthenticateUser(HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * Helper method that return a new random state token to use for authorization for Oauth.
+     * 
+     * @return {@link String} state token
+     */
+    default String getStateToken() {
+        return new BigInteger(130, new SecureRandom()).toString(32);
+    }
 
 }

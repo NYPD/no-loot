@@ -17,7 +17,7 @@
             <router-link to="/about" class="nav-link">About</router-link>
           </li>
         </ul>
-        <div class="d-flex">
+        <div class="d-flex user-info">
           <ul class="navbar-nav mb-2 mb-md-0">
             <router-link to="/login" class="nav-link">Login</router-link>
           </ul>
