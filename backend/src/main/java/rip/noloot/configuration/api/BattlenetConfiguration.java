@@ -6,15 +6,14 @@ import java.io.InputStream;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.io.Resource;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.annotation.SessionScope;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import rip.noloot.api.battlenet.BattlenetClientSecrets;
 import rip.noloot.bean.BattlenetSessionBean;
+import rip.noloot.proxy.PostRequestFactory;
 
 /**
  * Configuration class for everything Battlenet.
@@ -35,8 +34,14 @@ public class BattlenetConfiguration {
     }
 
     @Bean
-    @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    @SessionScope
     public BattlenetSessionBean battlenetSessionBean() {
         return new BattlenetSessionBean();
     }
+
+    @Bean
+    public PostRequestFactory postRequestFactory(ObjectMapper objectMapper) {
+        return new PostRequestFactory(objectMapper);
+    }
+
 }

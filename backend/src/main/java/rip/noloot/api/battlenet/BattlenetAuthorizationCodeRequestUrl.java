@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 import rip.noloot.api.battlenet.enums.BattlenetRegion;
+import rip.noloot.api.battlenet.util.OauthApiUtil;
 
 /**
  * Battlenet specific implementation of the OAuth 2.0 URL builder for an authorization web page to allow the end user to
@@ -17,8 +18,6 @@ import rip.noloot.api.battlenet.enums.BattlenetRegion;
 public class BattlenetAuthorizationCodeRequestUrl {
 
     private static final String RESPONSE_TYPE = "code";
-    private static final String BATTLENET_OAUTH_BASE_URL = "https://%s.battle.net";
-    private static final String BATTLENET_AUTHORIZE = "/oauth/authorize";
 
     private BattlenetClientSecrets battlenetClientSecrets;
     private String redirectUri;
@@ -53,7 +52,7 @@ public class BattlenetAuthorizationCodeRequestUrl {
 
     public String build() {
 
-        String oAuthAuthorizationUrlString = this.getOAuthAuthorizationUrlString(region == null ? BattlenetRegion.USA : region);
+        String oAuthAuthorizationUrlString = OauthApiUtil.getOAuthAuthorizationUrlString(region);
 
         StringBuilder builder = new StringBuilder(oAuthAuthorizationUrlString);
         builder.append("?");
@@ -70,10 +69,6 @@ public class BattlenetAuthorizationCodeRequestUrl {
         }
 
         return builder.toString();
-    }
-
-    private String getOAuthAuthorizationUrlString(BattlenetRegion region) {
-        return String.format(BATTLENET_OAUTH_BASE_URL + BATTLENET_AUTHORIZE, region.getCode());
     }
 
 }

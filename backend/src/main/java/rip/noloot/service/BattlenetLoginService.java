@@ -11,10 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import rip.noloot.annotation.BattlenetLogin;
 import rip.noloot.api.battlenet.BattlenetAuthorizationCodeRequestUrl;
+import rip.noloot.api.battlenet.BattlenetAuthorizationTokenRequest;
 import rip.noloot.api.battlenet.BattlenetClientSecrets;
+import rip.noloot.api.battlenet.response.AuthorizationResponse;
+import rip.noloot.api.battlenet.response.TokenResponse;
 import rip.noloot.bean.BattlenetSessionBean;
 import rip.noloot.exception.InvalidStateTokenException;
 import rip.noloot.model.User;
@@ -25,9 +29,6 @@ import rip.noloot.util.AppConstants;
 public class BattlenetLoginService implements Oauth2LoginService {
 
     private static final String OPEN_ID_SCOPE = "openid";
-    private static final String AUTHERIZATION_CODE_PARAMETER = "code";
-    private static final String STATE_TOKEN_PARAMTER = "state";
-
     private static final List<String> SCOPES = Arrays.asList(OPEN_ID_SCOPE);
 
     private String redirectURI;
@@ -43,7 +44,8 @@ public class BattlenetLoginService implements Oauth2LoginService {
     public String getAuthenticationRequestUrl() {
 
         BattlenetAuthorizationCodeRequestUrl battlenetAuthorizationCodeRequestUrl = new BattlenetAuthorizationCodeRequestUrl(battlenetClientSecrets,
-                                                                                                                             redirectURI, SCOPES);
+                                                                                                                             this.redirectURI,
+                                                                                                                             SCOPES);
 
         String stateToken = this.getStateToken();
 
@@ -56,15 +58,21 @@ public class BattlenetLoginService implements Oauth2LoginService {
     @Override
     public void verifyAuthenticationResponseAndRetrieveToken(HttpServletRequest request) {
 
-        String authorizationCode = request.getParameter(AUTHERIZATION_CODE_PARAMETER);
+        AuthorizationResponse authorizationResponse = new AuthorizationResponse(request);
 
-        String battlenetstateToken = request.getParameter(STATE_TOKEN_PARAMTER);
+        String battlenetstateToken = authorizationResponse.getStateToken();
         String sessionStateToken = battlenetSessionBean.getStateToken();
 
         boolean notSameStateToken = !Objects.equals(battlenetstateToken, sessionStateToken);
         if (notSameStateToken) throw new InvalidStateTokenException(request);
 
-        //TODO get token here
+        BattlenetAuthorizationTokenRequest battlenetAuthorizationTokenRequest = new BattlenetAuthorizationTokenRequest(new RestTemplate(),
+                                                                                                                       battlenetClientSecrets,
+                                                                                                                       authorizationResponse.getAuthorizationCode(),
+                                                                                                                       this.redirectURI);
+
+        TokenResponse tokenResponse = battlenetAuthorizationTokenRequest.execute();
+        battlenetSessionBean.setToken(tokenResponse);
 
     }
 

@@ -1,5 +1,6 @@
 package rip.noloot.bean;
 
+import rip.noloot.api.battlenet.response.TokenResponse;
 import rip.noloot.configuration.api.BattlenetConfiguration;
 
 /**
@@ -12,6 +13,7 @@ import rip.noloot.configuration.api.BattlenetConfiguration;
 public class BattlenetSessionBean {
 
     private String stateToken;
+    private TokenResponse tokenResponse;
 
     public String getStateToken() {
         return stateToken;
@@ -19,6 +21,14 @@ public class BattlenetSessionBean {
 
     public void setStateToken(String stateToken) {
         this.stateToken = stateToken;
+    }
+
+    public TokenResponse getToken() {
+        return tokenResponse;
+    }
+
+    public void setToken(TokenResponse tokenResponse) {
+        this.tokenResponse = tokenResponse;
     }
 
 }
