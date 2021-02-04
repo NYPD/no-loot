@@ -16,6 +16,12 @@ import rip.noloot.bean.NoLootSessionBean;
 import rip.noloot.configuration.api.BattlenetConfiguration;
 import rip.noloot.service.Service;
 
+/**
+ * Spring configuration class for application specific logic.
+ * 
+ * @author NYPD
+ *
+ */
 @Configuration
 @ComponentScan(basePackageClasses = {Service.class})
 @Import({BattlenetConfiguration.class, Log4j2Configuration.class})

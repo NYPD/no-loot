@@ -21,6 +21,12 @@ import org.springframework.core.env.Environment;
 
 import rip.noloot.util.AppConstants;
 
+/**
+ * Spring configuration class for LOG4J2
+ * 
+ * @author NYPD
+ *
+ */
 @Configuration
 public class Log4j2Configuration {
 
@@ -28,8 +34,7 @@ public class Log4j2Configuration {
     private static final String FILE_PATTERN = "/tomcat/logs/" + AppConstants.PROJECT_NAME + "/rip.%d{yyyy-MM-dd}.log";
 
     private final ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
-    private final LayoutComponentBuilder standard = builder.newLayout("PatternLayout").addAttribute("pattern",
-                                                                                                    ENCODER_PATTERN);
+    private final LayoutComponentBuilder standard = builder.newLayout("PatternLayout").addAttribute("pattern", ENCODER_PATTERN);
 
     @Autowired
     private Environment springEnvironment;
