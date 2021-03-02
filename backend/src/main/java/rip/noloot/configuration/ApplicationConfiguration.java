@@ -1,7 +1,5 @@
 package rip.noloot.configuration;
 
-import java.net.http.HttpClient;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +22,7 @@ import rip.noloot.service.Service;
  */
 @Configuration
 @ComponentScan(basePackageClasses = {Service.class})
-@Import({BattlenetConfiguration.class, Log4j2Configuration.class})
+@Import({BattlenetConfiguration.class, Log4j2Configuration.class, JpaConfiguration.class})
 public class ApplicationConfiguration {
 
     @Bean
@@ -39,11 +37,6 @@ public class ApplicationConfiguration {
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper;
-    }
-
-    @Bean
-    public HttpClient httpClient() {
-        return HttpClient.newHttpClient();
     }
 
 }

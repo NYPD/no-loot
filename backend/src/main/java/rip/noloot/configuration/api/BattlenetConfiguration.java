@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import rip.noloot.api.battlenet.BattlenetClientSecrets;
 import rip.noloot.bean.BattlenetSessionBean;
-import rip.noloot.proxy.PostRequestFactory;
 
 /**
  * Configuration class for everything Battlenet.
@@ -37,11 +36,6 @@ public class BattlenetConfiguration {
     @SessionScope
     public BattlenetSessionBean battlenetSessionBean() {
         return new BattlenetSessionBean();
-    }
-
-    @Bean
-    public PostRequestFactory postRequestFactory(ObjectMapper objectMapper) {
-        return new PostRequestFactory(objectMapper);
     }
 
 }

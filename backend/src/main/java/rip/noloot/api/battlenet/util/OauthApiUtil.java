@@ -13,6 +13,7 @@ public class OauthApiUtil {
     private static final String BATTLENET_OAUTH_BASE_URL = "https://%s.battle.net/oauth";
     private static final String BATTLENET_AUTHORIZE = "/authorize";
     private static final String BATTLENET_TOKEN = "/token";
+    private static final String BATTLENET_USER_INFO = "/userinfo";
 
     private OauthApiUtil() {
         throw new AssertionError("No BattlenetApiUtil instances for you");
@@ -41,5 +42,18 @@ public class OauthApiUtil {
     public static String getTokenRequestUrlString(BattlenetRegion region) {
         if (region == null) region = BattlenetRegion.USA;
         return String.format(BATTLENET_OAUTH_BASE_URL + BATTLENET_TOKEN, region.getCode());
+    }
+
+    /**
+     * 
+     * Using the {@link BattlenetRegion} passed in, constructs a url for battlenet's oauth user info request. If
+     * {@link BattlenetRegion} is null, it defaults to {@link BattlenetRegion.USA}
+     * 
+     * @param region
+     * @return A String tokenRequest URL for battlenet
+     */
+    public static String getUserInfoUrlString(BattlenetRegion region) {
+        if (region == null) region = BattlenetRegion.USA;
+        return String.format(BATTLENET_OAUTH_BASE_URL + BATTLENET_USER_INFO, region.getCode());
     }
 }

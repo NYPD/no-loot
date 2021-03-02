@@ -31,7 +31,8 @@ public interface Oauth2LoginService {
     public void verifyAuthenticationResponseAndRetrieveToken(HttpServletRequest request) throws InvalidStateTokenException;
 
     /**
-     * Return the corresponding app user using the unique API's user id. If no user is found null is returned.
+     * Return the corresponding app user using the unique API's user id. If no user is found a new user will be created,
+     * persisted, then returned.
      * 
      * If available, sets the URL API profile picture for the user
      * 
