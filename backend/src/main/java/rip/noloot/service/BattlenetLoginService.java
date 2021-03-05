@@ -89,7 +89,7 @@ public class BattlenetLoginService implements Oauth2LoginService {
         Map<String, String> headers = new HashMap<>();
         headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken());
 
-        UserInfoResponse userInfo = HttpRequestUtil.sendPost(userInfoUrlString, headers, UserInfoResponse.class);
+        UserInfoResponse userInfo = HttpRequestUtil.sendGet(userInfoUrlString, headers, null, UserInfoResponse.class);
 
         return null;
     }
