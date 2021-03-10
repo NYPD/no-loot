@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import rip.noloot.bean.NoLootSessionBean;
+import rip.noloot.domain.NoLootUser;
 import rip.noloot.exception.UnauthorizedUserException;
-import rip.noloot.model.User;
 import rip.noloot.service.BattlenetLoginService;
 
 @RestController
@@ -47,12 +47,12 @@ public class OauthController {
 
         battlenetLoginService.verifyAuthenticationResponseAndRetrieveToken(request);
 
-        User noLootUser = battlenetLoginService.getNoLootUser();
+        NoLootUser noLootUser = battlenetLoginService.getNoLootUser();
 
         boolean unauthorized = noLootUser == null;
         if (unauthorized) throw new UnauthorizedUserException(request);
 
-        noLootSessionBean.setUser(noLootUser);
+        noLootSessionBean.setNoLootUser(noLootUser);
 
         boolean rememberMe = noLootSessionBean.isRememberMe();
         if (rememberMe) battlenetLoginService.createUserCookies(response);

@@ -27,7 +27,7 @@ public class ApplicationConfiguration {
 
     @Bean
     @SessionScope
-    public NoLootSessionBean soilAndPimpSessionBean() {
+    public NoLootSessionBean noLootSessionBean() {
         return new NoLootSessionBean();
     }
 

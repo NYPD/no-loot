@@ -1,32 +1,49 @@
 package rip.noloot.bean;
 
-import rip.noloot.model.User;
+import rip.noloot.configuration.ApplicationConfiguration;
+import rip.noloot.domain.NoLootUser;
 
+/**
+ * Session bean containing all the relevant information needed for the noloot.rip application and the currently logged in
+ * user.
+ * 
+ * This is set up in {@link ApplicationConfiguration}
+ * 
+ * @author NYPD
+ */
 public class NoLootSessionBean {
 
-    public void setRememberMe(boolean rememberMe) {
-        // TODO Auto-generated method stub
+    private NoLootUser noLootUser;
+    private boolean rememberMe;
+    private String prevPath;
 
+    public NoLootUser getNoLootUser() {
+        return this.noLootUser;
     }
 
-    public void setPrevPath(String prevPath) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void setUser(User soilAndPimpUser) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public String getPrevPath() {
-        // TODO Auto-generated method stub
-        return null;
+    public void setNoLootUser(NoLootUser noLootUser) {
+        this.noLootUser = noLootUser;
     }
 
     public boolean isRememberMe() {
-        // TODO Auto-generated method stub
-        return false;
+        return this.rememberMe;
+    }
+
+    public void setRememberMe(boolean rememberMe) {
+        this.rememberMe = rememberMe;
+    }
+
+    public String getPrevPath() {
+        return this.prevPath;
+    }
+
+    public void setPrevPath(String prevPath) {
+        this.prevPath = prevPath;
+    }
+
+    @Override
+    public String toString() {
+        return "NoLootSessionBean [noLootUser=" + this.noLootUser + ", rememberMe=" + this.rememberMe + ", prevPath=" + this.prevPath + "]";
     }
 
 }

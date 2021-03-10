@@ -24,8 +24,9 @@ import rip.noloot.api.battlenet.response.TokenResponse;
 import rip.noloot.api.battlenet.response.UserInfoResponse;
 import rip.noloot.api.battlenet.util.OauthApiUtil;
 import rip.noloot.bean.BattlenetSessionBean;
+import rip.noloot.domain.NoLootUser;
 import rip.noloot.exception.InvalidStateTokenException;
-import rip.noloot.model.User;
+import rip.noloot.repository.UsersRepository;
 import rip.noloot.util.AppConstants;
 import rip.noloot.util.HttpRequestUtil;
 
@@ -44,6 +45,8 @@ public class BattlenetLoginService implements Oauth2LoginService {
     private BattlenetClientSecrets battlenetClientSecrets;
     @Autowired
     private BattlenetSessionBean battlenetSessionBean;
+    @Autowired
+    private UsersRepository usersRepository;
 
     @Override
     public String getAuthenticationRequestUrl() {
@@ -81,7 +84,7 @@ public class BattlenetLoginService implements Oauth2LoginService {
     }
 
     @Override
-    public User getNoLootUser() {
+    public NoLootUser getNoLootUser() {
 
         String userInfoUrlString = OauthApiUtil.getUserInfoUrlString(null);
         TokenResponse token = battlenetSessionBean.getToken();
@@ -90,6 +93,8 @@ public class BattlenetLoginService implements Oauth2LoginService {
         headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken());
 
         UserInfoResponse userInfo = HttpRequestUtil.sendGet(userInfoUrlString, headers, null, UserInfoResponse.class);
+
+        NoLootUser findByBattleNetId = usersRepository.findByBattleNetId(userInfo.getId());
 
         return null;
     }

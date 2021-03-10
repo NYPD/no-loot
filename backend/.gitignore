@@ -1,3 +1,25 @@
-/target/
+#################
+## Maven Stuff ##
+#################
+target
+
+###################
+## Eclipse Stuff ##
+###################
+build
+classes
+.project
+.classpath
+.settings
+
+#################
+## Vue Stuff   ##
+#################
 /src/main/webapp
+
+
+##########################
+## Sensitive Stuff Bruh ##
+##########################
 *secret.json
+WebContent/META-INF/context.xml

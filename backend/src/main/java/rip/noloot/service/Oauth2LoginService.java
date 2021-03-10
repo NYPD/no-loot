@@ -6,8 +6,8 @@ import java.security.SecureRandom;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import rip.noloot.domain.NoLootUser;
 import rip.noloot.exception.InvalidStateTokenException;
-import rip.noloot.model.User;
 
 public interface Oauth2LoginService {
 
@@ -38,7 +38,7 @@ public interface Oauth2LoginService {
      * 
      * @return {@link User}
      */
-    public User getNoLootUser();
+    public NoLootUser getNoLootUser();
 
     /**
      * Creates API specific cookies to be able to authenticate the user again without having them login again and sets them
