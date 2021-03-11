@@ -49,7 +49,7 @@ public class OauthController {
 
         NoLootUser noLootUser = battlenetLoginService.getNoLootUser();
 
-        boolean unauthorized = noLootUser == null;
+        boolean unauthorized = noLootUser == null || !noLootUser.isActive();
         if (unauthorized) throw new UnauthorizedUserException(request);
 
         noLootSessionBean.setNoLootUser(noLootUser);

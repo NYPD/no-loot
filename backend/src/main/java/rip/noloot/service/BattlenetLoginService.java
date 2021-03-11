@@ -94,9 +94,14 @@ public class BattlenetLoginService implements Oauth2LoginService {
 
         UserInfoResponse userInfo = HttpRequestUtil.sendGet(userInfoUrlString, headers, null, UserInfoResponse.class);
 
-        NoLootUser findByBattleNetId = usersRepository.findByBattleNetId(userInfo.getId());
+        NoLootUser noLootUser = usersRepository.findByBattleNetId(userInfo.getId());
 
-        return null;
+        if (noLootUser == null) {
+            noLootUser = new NoLootUser(userInfo);
+            usersRepository.save(noLootUser);
+        }
+
+        return noLootUser;
     }
 
     @Override
