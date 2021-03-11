@@ -1,19 +1,26 @@
 package rip.noloot.service;
 
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import rip.noloot.annotation.BattlenetLogin;
 import rip.noloot.api.battlenet.BattlenetAuthorizationCodeRequestUrl;
@@ -34,8 +41,10 @@ import rip.noloot.util.HttpRequestUtil;
 @BattlenetLogin
 public class BattlenetLoginService implements Oauth2LoginService {
 
+    private static final Logger LOGGER = LogManager.getLogger(BattlenetLoginService.class);
+
     private static final String OPEN_ID_SCOPE = "openid";
-    private static final List<String> SCOPES = Arrays.asList(OPEN_ID_SCOPE);
+    private static final List<String> SCOPES = Arrays.asList(BattlenetLoginService.OPEN_ID_SCOPE);
 
     private String redirectURI;
 
@@ -51,14 +60,14 @@ public class BattlenetLoginService implements Oauth2LoginService {
     @Override
     public String getAuthenticationRequestUrl() {
 
-        BattlenetAuthorizationCodeRequestUrl battlenetAuthorizationCodeRequestUrl = new BattlenetAuthorizationCodeRequestUrl(battlenetClientSecrets,
+        BattlenetAuthorizationCodeRequestUrl battlenetAuthorizationCodeRequestUrl = new BattlenetAuthorizationCodeRequestUrl(this.battlenetClientSecrets,
                                                                                                                              this.redirectURI,
-                                                                                                                             SCOPES);
+                                                                                                                             BattlenetLoginService.SCOPES);
 
         String stateToken = this.getStateToken();
 
         battlenetAuthorizationCodeRequestUrl.setState(stateToken);
-        battlenetSessionBean.setStateToken(stateToken);
+        this.battlenetSessionBean.setStateToken(stateToken);
 
         return battlenetAuthorizationCodeRequestUrl.build();
     }
@@ -69,17 +78,17 @@ public class BattlenetLoginService implements Oauth2LoginService {
         AuthorizationResponse authorizationResponse = new AuthorizationResponse(request);
 
         String battlenetstateToken = authorizationResponse.getStateToken();
-        String sessionStateToken = battlenetSessionBean.getStateToken();
+        String sessionStateToken = this.battlenetSessionBean.getStateToken();
 
         boolean notSameStateToken = !Objects.equals(battlenetstateToken, sessionStateToken);
         if (notSameStateToken) throw new InvalidStateTokenException(request);
 
-        BattlenetAuthorizationTokenRequest battlenetAuthorizationTokenRequest = new BattlenetAuthorizationTokenRequest(battlenetClientSecrets,
+        BattlenetAuthorizationTokenRequest battlenetAuthorizationTokenRequest = new BattlenetAuthorizationTokenRequest(this.battlenetClientSecrets,
                                                                                                                        authorizationResponse.getAuthorizationCode(),
                                                                                                                        this.redirectURI);
 
         TokenResponse tokenResponse = battlenetAuthorizationTokenRequest.execute();
-        battlenetSessionBean.setToken(tokenResponse);
+        this.battlenetSessionBean.setTokenResponse(tokenResponse);
 
     }
 
@@ -87,18 +96,18 @@ public class BattlenetLoginService implements Oauth2LoginService {
     public NoLootUser getNoLootUser() {
 
         String userInfoUrlString = OauthApiUtil.getUserInfoUrlString(null);
-        TokenResponse token = battlenetSessionBean.getToken();
+        TokenResponse token = this.battlenetSessionBean.getTokenResponse();
 
         Map<String, String> headers = new HashMap<>();
         headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken());
 
         UserInfoResponse userInfo = HttpRequestUtil.sendGet(userInfoUrlString, headers, null, UserInfoResponse.class);
 
-        NoLootUser noLootUser = usersRepository.findByBattleNetId(userInfo.getId());
+        NoLootUser noLootUser = this.usersRepository.findByBattleNetId(userInfo.getId());
 
         if (noLootUser == null) {
             noLootUser = new NoLootUser(userInfo);
-            usersRepository.save(noLootUser);
+            this.usersRepository.save(noLootUser);
         }
 
         return noLootUser;
@@ -106,7 +115,26 @@ public class BattlenetLoginService implements Oauth2LoginService {
 
     @Override
     public void createUserCookies(HttpServletResponse response) {
-        // TODO Auto-generated method stub
+
+        TokenResponse tokenResponse = this.battlenetSessionBean.getTokenResponse();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        byte[] tokenResponseBytes = null;
+        try {
+            tokenResponseBytes = objectMapper.writeValueAsBytes(tokenResponse);
+        }
+        catch (JsonProcessingException e) {
+            BattlenetLoginService.LOGGER.error("Error trying to encode TokenResponse object", e);
+        }
+
+        String encodedTokenResponse = Base64.getEncoder().encodeToString(tokenResponseBytes);
+        Cookie cookie = new Cookie(TokenResponse.class.getSimpleName(), encodedTokenResponse);
+        cookie.setPath("/");
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(AppConstants.FIVE_YEARS_IN_SECONDS);
+
+        response.addCookie(cookie);
 
     }
 
@@ -120,10 +148,10 @@ public class BattlenetLoginService implements Oauth2LoginService {
     private void init() {
 
         // If it is a development profile, try and find a localhost redirect
-        String[] activeProfiles = springEnvironment.getActiveProfiles();
+        String[] activeProfiles = this.springEnvironment.getActiveProfiles();
         boolean isDevelopment = Arrays.stream(activeProfiles).filter(AppConstants.DEVELOPMENT_PROFILE::equals).findAny().orElse(null) != null;
 
-        for (String uri : battlenetClientSecrets.getRedirectUris()) {
+        for (String uri : this.battlenetClientSecrets.getRedirectUris()) {
             boolean isLocalHost = uri.contains("localhost");
 
             if (isLocalHost && isDevelopment || !isLocalHost && !isDevelopment) {

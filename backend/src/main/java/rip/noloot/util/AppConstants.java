@@ -21,4 +21,6 @@ public class AppConstants {
     public static final String DEV_URL = "http://localhost:8080";
     public static final String PROD_URL = "https://noloot.rip";
 
+    public static final int FIVE_YEARS_IN_SECONDS = 157680000;
+
 }

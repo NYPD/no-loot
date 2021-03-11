@@ -23,11 +23,11 @@ public class BattlenetSessionBean {
         this.stateToken = stateToken;
     }
 
-    public TokenResponse getToken() {
+    public TokenResponse getTokenResponse() {
         return tokenResponse;
     }
 
-    public void setToken(TokenResponse tokenResponse) {
+    public void setTokenResponse(TokenResponse tokenResponse) {
         this.tokenResponse = tokenResponse;
     }
 

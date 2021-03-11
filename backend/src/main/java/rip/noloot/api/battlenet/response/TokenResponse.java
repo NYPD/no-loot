@@ -9,20 +9,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TokenResponse {
 
+    public static final String ACCESS_TOKEN = "access_token";
+    public static final String TOKEN_TYPE = "token_type";
+    public static final String BATTLENET_SCOPE = "scope";
+    public static final String EXPIRATION = "expires_in";
+
     /**
      * The access token used on future requests to the API.
      */
-    @JsonProperty("access_token")
+    @JsonProperty(TokenResponse.ACCESS_TOKEN)
     private String accessToken;
-    @JsonProperty("token_type")
+    @JsonProperty(TokenResponse.TOKEN_TYPE)
     private String tokenType;
-    @JsonProperty("scope")
+    @JsonProperty(TokenResponse.BATTLENET_SCOPE)
     private String scope;
 
     /**
      * Seconds from when received that the token will expire.
      */
-    @JsonProperty("expires_in")
+    @JsonProperty(TokenResponse.EXPIRATION)
     private Long expiresIn;
 
     public String getAccessToken() {
@@ -34,7 +39,7 @@ public class TokenResponse {
     }
 
     public String getScope() {
-        return scope;
+        return this.scope;
     }
 
     public Long getExpiresIn() {
