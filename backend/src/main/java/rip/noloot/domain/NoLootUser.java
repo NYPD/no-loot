@@ -40,9 +40,12 @@ public class NoLootUser {
         this.battlenetId = userInfoResponse.getId();
         this.battlenetTag = userInfoResponse.getBattletag();
 
+        this.active = true;
+        this.dateRegistered = LocalDateTime.now();
+
     }
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 

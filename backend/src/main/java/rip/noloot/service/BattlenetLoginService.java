@@ -41,6 +41,8 @@ import rip.noloot.util.HttpRequestUtil;
 @BattlenetLogin
 public class BattlenetLoginService implements Oauth2LoginService {
 
+    public static final String BATTLENET_TOKEN_COOKIE_NAME = "battlenet-token";
+
     private static final Logger LOGGER = LogManager.getLogger(BattlenetLoginService.class);
 
     private static final String OPEN_ID_SCOPE = "openid";
@@ -48,6 +50,8 @@ public class BattlenetLoginService implements Oauth2LoginService {
 
     private String redirectURI;
 
+    @Autowired
+    private ObjectMapper objectMapper;
     @Autowired
     private Environment springEnvironment;
     @Autowired
@@ -118,17 +122,16 @@ public class BattlenetLoginService implements Oauth2LoginService {
 
         TokenResponse tokenResponse = this.battlenetSessionBean.getTokenResponse();
 
-        ObjectMapper objectMapper = new ObjectMapper();
         byte[] tokenResponseBytes = null;
         try {
-            tokenResponseBytes = objectMapper.writeValueAsBytes(tokenResponse);
+            tokenResponseBytes = this.objectMapper.writeValueAsBytes(tokenResponse);
         }
         catch (JsonProcessingException e) {
             BattlenetLoginService.LOGGER.error("Error trying to encode TokenResponse object", e);
         }
 
         String encodedTokenResponse = Base64.getEncoder().encodeToString(tokenResponseBytes);
-        Cookie cookie = new Cookie(TokenResponse.class.getSimpleName(), encodedTokenResponse);
+        Cookie cookie = new Cookie(BATTLENET_TOKEN_COOKIE_NAME, encodedTokenResponse);
         cookie.setPath("/");
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
@@ -140,7 +143,29 @@ public class BattlenetLoginService implements Oauth2LoginService {
 
     @Override
     public void reAuthenticateUser(HttpServletRequest request, HttpServletResponse response) {
-        // TODO Auto-generated method stub
+
+        Cookie[] cookies = request.getCookies();
+
+        Map<String, Cookie> cookieByName = new HashMap<>();
+        for (Cookie cookie : cookies)
+            cookieByName.put(cookie.getName(), cookie);
+
+        String encodedTokenResponseJson = cookieByName.get(BATTLENET_TOKEN_COOKIE_NAME).getValue();
+        byte[] tokenResponseJsonBytes = Base64.getDecoder().decode(encodedTokenResponseJson);
+        String tokenResponseJson = new String(tokenResponseJsonBytes);
+
+        TokenResponse tokenResponse = null;
+        //TODO test the token response through bliizy api
+        try {
+            tokenResponse = this.objectMapper.readValue(tokenResponseJson, TokenResponse.class);
+            this.battlenetSessionBean.setTokenResponse(tokenResponse);
+
+            NoLootUser noLootUser = this.getNoLootUser();
+            System.out.println(noLootUser);
+        }
+        catch (JsonProcessingException e) {
+            LOGGER.error(e);
+        }
 
     }
 

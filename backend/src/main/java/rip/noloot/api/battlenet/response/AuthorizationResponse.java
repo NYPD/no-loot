@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * POJO for reading in the oAuth2 authorization response from https://_region_.battle.net/oauth/authorize
- * 
+ * <p>
  * Which seems to be just a get request
  */
 public class AuthorizationResponse {
@@ -26,8 +26,8 @@ public class AuthorizationResponse {
         this.authorizationCode = request.getParameter(AUTHERIZATION_CODE_PARAMETER);
         this.stateToken = request.getParameter(STATE_TOKEN_PARAMTER);
 
-        Objects.requireNonNull(authorizationCode, AUTHERIZATION_CODE_PARAMETER + " is not found in request: " + request.getRequestURI());
-        Objects.requireNonNull(stateToken, STATE_TOKEN_PARAMTER + " is not found in request: " + request.getRequestURI());
+        Objects.requireNonNull(this.authorizationCode, AUTHERIZATION_CODE_PARAMETER + " is not found in request: " + request.getRequestURI());
+        Objects.requireNonNull(this.stateToken, STATE_TOKEN_PARAMTER + " is not found in request: " + request.getRequestURI());
     }
 
     public String getAuthorizationCode() {

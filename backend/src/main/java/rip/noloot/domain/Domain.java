@@ -4,7 +4,7 @@ import rip.noloot.configuration.JpaConfiguration;
 
 /**
  * This interface is used for the {@link JpaConfiguration} entity base packages.
- * 
+ * <p>
  * This interface should not to be implemented.
  * 
  * @author NYPD

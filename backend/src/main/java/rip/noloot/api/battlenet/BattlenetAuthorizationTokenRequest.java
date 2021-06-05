@@ -15,7 +15,7 @@ import rip.noloot.util.HttpRequestUtil;
 
 /**
  * Battlenet specific implementation of the OAuth 2.0 request for an access token based on an authorization code.
- * 
+ * <p>
  * A {@link TokenResponse} is returned by {@link #execute()} to be used for future access of protected resources.
  * 
  * @author NYPD

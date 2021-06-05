@@ -5,7 +5,7 @@ import rip.noloot.configuration.api.BattlenetConfiguration;
 
 /**
  * Session bean containing all the relevant information specific to the Battlenet API and the current user.
- * 
+ * <p>
  * This is set up in {@link BattlenetConfiguration}
  * 
  * @author NYPD
@@ -16,7 +16,7 @@ public class BattlenetSessionBean {
     private TokenResponse tokenResponse;
 
     public String getStateToken() {
-        return stateToken;
+        return this.stateToken;
     }
 
     public void setStateToken(String stateToken) {
@@ -24,7 +24,7 @@ public class BattlenetSessionBean {
     }
 
     public TokenResponse getTokenResponse() {
-        return tokenResponse;
+        return this.tokenResponse;
     }
 
     public void setTokenResponse(TokenResponse tokenResponse) {

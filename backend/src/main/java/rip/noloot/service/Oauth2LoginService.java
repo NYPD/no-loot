@@ -22,7 +22,7 @@ public interface Oauth2LoginService {
      * 
      * Verifies the response from the API server and if valid, retrieves the token needed to make API calls. If the response
      * is invalid due a miss matching state token a {@link InvalidStateTokenException} is thrown.
-     * 
+     * <p>
      * The token is stored in session to be used to make any future API calls
      * 
      * @param request - The HttpServletRequest from the API server
@@ -33,7 +33,7 @@ public interface Oauth2LoginService {
     /**
      * Return the corresponding app user using the unique API's user id. If no user is found a new user will be created,
      * persisted, then returned.
-     * 
+     * <p>
      * If available, sets the URL API profile picture for the user
      * 
      * @return {@link User}
@@ -49,8 +49,9 @@ public interface Oauth2LoginService {
     public void createUserCookies(HttpServletResponse response);
 
     /**
-     * Should redirect the user to wherever the authentication process begins and try to authenticate the user again
-     * seamlessly
+     * Should re-authenticate the user with the given API and set any needed data in the session. If re-authentication can't
+     * be done redirect the user to wherever the authentication process begins (post login click) and try to authenticate the
+     * user again seamlessly
      * 
      * @param response
      */

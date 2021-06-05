@@ -17,7 +17,7 @@ import rip.noloot.exception.UnauthorizedUserException;
 import rip.noloot.service.BattlenetLoginService;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/login")
 public class OauthController {
 
     @Autowired
@@ -33,10 +33,10 @@ public class OauthController {
                                     @RequestParam(value = "rememberMe", required = false) boolean rememberMe,
                                     @RequestParam(value = "prevPath", required = false) String prevPath) throws IOException {
 
-        noLootSessionBean.setRememberMe(rememberMe);
-        noLootSessionBean.setPrevPath(prevPath);
+        this.noLootSessionBean.setRememberMe(rememberMe);
+        this.noLootSessionBean.setPrevPath(prevPath);
 
-        String authenticationRequestUrl = battlenetLoginService.getAuthenticationRequestUrl();
+        String authenticationRequestUrl = this.battlenetLoginService.getAuthenticationRequestUrl();
 
         response.sendRedirect(authenticationRequestUrl);
 
@@ -45,23 +45,23 @@ public class OauthController {
     @RequestMapping(value = "battlenet-oauth-verify")
     public ModelAndView battlenetOAuthVerify(HttpServletRequest request, HttpServletResponse response) {
 
-        battlenetLoginService.verifyAuthenticationResponseAndRetrieveToken(request);
+        this.battlenetLoginService.verifyAuthenticationResponseAndRetrieveToken(request);
 
-        NoLootUser noLootUser = battlenetLoginService.getNoLootUser();
+        NoLootUser noLootUser = this.battlenetLoginService.getNoLootUser();
 
         boolean unauthorized = noLootUser == null || !noLootUser.isActive();
         if (unauthorized) throw new UnauthorizedUserException(request);
 
-        noLootSessionBean.setNoLootUser(noLootUser);
+        this.noLootSessionBean.setNoLootUser(noLootUser);
 
-        boolean rememberMe = noLootSessionBean.isRememberMe();
-        if (rememberMe) battlenetLoginService.createUserCookies(response);
+        boolean rememberMe = this.noLootSessionBean.isRememberMe();
+        if (rememberMe) this.battlenetLoginService.createUserCookies(response);
 
-        String prevPath = noLootSessionBean.getPrevPath();
+        String prevPath = this.noLootSessionBean.getPrevPath();
         boolean hasPrevPath = prevPath != null;
 
         if (hasPrevPath) {
-            noLootSessionBean.setPrevPath(null);
+            this.noLootSessionBean.setPrevPath(null);
             return new ModelAndView("redirect:" + prevPath);
         } else {
             return new ModelAndView("redirect:/admin/maintenance");

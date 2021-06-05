@@ -6,7 +6,7 @@ import rip.noloot.domain.NoLootUser;
 /**
  * Session bean containing all the relevant information needed for the noloot.rip application and the currently logged in
  * user.
- * 
+ * <p>
  * This is set up in {@link ApplicationConfiguration}
  * 
  * @author NYPD
